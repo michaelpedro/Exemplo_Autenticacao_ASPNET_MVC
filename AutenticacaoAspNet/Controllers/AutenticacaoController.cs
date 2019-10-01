@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using AutenticacaoAspNet.Util;
 
 namespace AutenticacaoAspNet.Controllers
 {
@@ -30,7 +31,7 @@ namespace AutenticacaoAspNet.Controllers
             {
                 Nome = model.Nome,
                 Login = model.Login,
-                Senha = model.Senha
+                Senha = Hash.GerarHash(model.Senha)
             };
 
             db.Usuarios.Add(user);
