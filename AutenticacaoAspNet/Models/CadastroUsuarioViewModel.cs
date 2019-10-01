@@ -18,7 +18,7 @@ namespace AutenticacaoAspNet.Models
         public string Senha { get; set; }
 
         [Display(Name = "Confirmar Senha")]
-        [Required(ErrorMessage = "Informe sua senha")]
+        [Required(ErrorMessage = "Confirme sua senha")]
         [DataType(DataType.Password)]
         [MinLength(6, ErrorMessage = "A senha deve possuir no mínimo 6 caracteres")]
         [Compare(nameof(Senha), ErrorMessage = "As senhas não se coincidem")]
