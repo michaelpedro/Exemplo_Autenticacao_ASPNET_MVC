@@ -27,6 +27,12 @@ namespace AutenticacaoAspNet.Controllers
                 return View(model);
             }
 
+            if(db.Usuarios.Count(x => x.Login == model.Login) > 0)
+            {
+                ModelState.AddModelError("Login", "O nome de login já existe, por gentileza, escolha outro nome.");
+                return View(model);
+            }
+
             Usuarios user = new Usuarios
             {
                 Nome = model.Nome,
