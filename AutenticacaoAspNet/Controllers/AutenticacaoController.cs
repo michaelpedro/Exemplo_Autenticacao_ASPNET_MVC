@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using AutenticacaoAspNet.Util;
+using System.Security.Claims;
 
 namespace AutenticacaoAspNet.Controllers
 {
@@ -44,6 +45,60 @@ namespace AutenticacaoAspNet.Controllers
             db.SaveChanges();
 
             return RedirectToAction("Index", "Home");
+        }
+
+        public ActionResult Login (string ReturnUrl)
+        {
+            var viewModel = new LoginViewModel
+            {
+                UrlRetorno = ReturnUrl
+            };
+
+            return View(viewModel); 
+        }
+
+        [HttpPost]
+        public ActionResult Login (LoginViewModel model)
+        {
+            if(!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var usuario = db.Usuarios.FirstOrDefault(x => x.Login == model.Login);
+
+            //Usuário não encontrado
+            if(usuario == null)
+            {
+                ModelState.AddModelError("Login", "O usuário não foi localizado");
+                return View(model);
+            }
+
+            //Usuário válido, porém com senha incorreta.
+            if(usuario.Senha != Hash.GerarHash(model.Senha))
+            {
+                ModelState.AddModelError("Senha", "Senha incorreta");
+                return View(model);
+            }
+
+            var identity = new ClaimsIdentity(new[]
+            {
+                new Claim(ClaimTypes.Name, usuario.Nome),
+                new Claim("Login", usuario.Login)
+            }, "ApplicationCookie");
+
+            /*
+             * Realiza o login do usuário no OWIN, passando o objeto [identity] do tipo ClaimsIdentity
+             * Logo após, irá criar um cookie de autenticação na aplicação cotendo as informações deste usuário.
+             */
+            Request.GetOwinContext().Authentication.SignIn(identity);
+
+            //Redireciona o usuário para a url que o mesmo estava anteriormente.
+            if (!string.IsNullOrWhiteSpace(model.UrlRetorno) || Url.IsLocalUrl(model.UrlRetorno))
+                return Redirect(model.UrlRetorno);
+
+            else
+                return RedirectToAction("Index", "Regras");
         }
     }
 }
