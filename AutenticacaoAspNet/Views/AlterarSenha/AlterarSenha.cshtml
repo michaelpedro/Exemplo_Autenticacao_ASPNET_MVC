@@ -6,6 +6,13 @@
 
 <h2>AlterarSenha</h2>
 
+@if (TempData["Mensagem"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Mensagem"]
+    </div>
+}
+
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
@@ -43,8 +50,9 @@
             </div>
         </div>
     </div>
+}
 
 @section scripts{
-        <script src="~/Scripts/jquery.validate.min.js"></script>
-        <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
 }

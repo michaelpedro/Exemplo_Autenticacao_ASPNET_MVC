@@ -46,6 +46,7 @@ namespace AutenticacaoAspNet.Controllers
             db.Entry(usuario).State = EntityState.Modified;
             db.SaveChanges();
 
+            TempData["Mensagem"] = "A senha foi alterada com sucesso.";
             return RedirectToAction("Index", "Home");
         }
     }

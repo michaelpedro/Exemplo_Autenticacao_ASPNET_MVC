@@ -44,7 +44,8 @@ namespace AutenticacaoAspNet.Controllers
             db.Usuarios.Add(user);
             db.SaveChanges();
 
-            return RedirectToAction("Index", "Home");
+            TempData["Mensagem"] = "O cadastro do usuário foi realizado com sucesso, efetue o login para continuar.";
+            return RedirectToAction("Login", "Autenticacao");
         }
 
         public ActionResult Login (string ReturnUrl)
