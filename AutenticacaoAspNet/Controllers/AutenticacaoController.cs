@@ -100,5 +100,12 @@ namespace AutenticacaoAspNet.Controllers
             else
                 return RedirectToAction("Index", "Regras");
         }
+
+        public ActionResult Logout ()
+        {
+            //Destroi o cookie que foi criado anteriormente no login do usuário.
+            Request.GetOwinContext().Authentication.SignOut("ApplicationCookie");
+            return RedirectToAction("Index", "Home");
+        }
     }
 }
